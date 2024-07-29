@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dimensionamento de Infra - TIM BRASIL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+            color: #0033A0; /* Azul escuro TIM */
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #00a5ce; /* Azul claro TIM */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #005BB5; /* Azul escuro ao passar o mouse */
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            text-align: center;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dimensionamento de Infra - TIM BRASIL</h1>
+        <label for="V_dc">Tensão DC (V_dc):</label>
+        <input type="number" id="V_dc" step="any">
+        
+        <label for="I_dc">Corrente DC (I_dc):</label>
+        <input type="number" id="I_dc" step="any">
+        
+        <label for="fases">Número de Fases:</label>
+        <input type="number" id="fases" step="any">
+        
+        <label for="V_ac">Tensão AC da Rede (V_ac):</label>
+        <input type="number" id="V_ac" step="any">
+        
+        <button onclick="calcularCorrenteProjeto()">Calcular</button>
+        
+        <div class="result" id="resultado"></div>
+    </div>
+
+    <script>
+        function calcularCorrenteProjeto() {
+            // Obter valores de entrada
+            const V_dc = parseFloat(document.getElementById('V_dc').value);
+            const I_dc = parseFloat(document.getElementById('I_dc').value);
+            const fases = parseInt(document.getElementById('fases').value);
+            const V_ac = parseFloat(document.getElementById('V_ac').value);
+            
+            // Verificar se os valores são válidos
+            if (isNaN(V_dc) || isNaN(I_dc) || isNaN(fases) || isNaN(V_ac)) {
+                alert('Por favor, insira todos os valores corretamente.');
+                return;
+            }
+
+            // Constantes
+            const FP = 0.98;
+            const Rendimento = 0.99;
+
+            // Calcular a Potência DC
+            const P_dc = V_dc * I_dc;
+
+            // Calcular Corrente de Projeto
+            let I_projeto;
+            if (fases === 2) {
+                const V_ac_bifasico = 110; // Tensão fase-terra para bifásico
+                I_projeto = P_dc / (V_ac_bifasico * FP * Rendimento * 2);
+            } else if (fases === 3) {
+                const V_ac_trifasico = 220; // Tensão de linha para trifásico
+                I_projeto = P_dc / (Math.sqrt(3) * V_ac_trifasico * FP * Rendimento);
+            } else {
+                alert('Número de fases inválido. Deve ser 2 (bifásico) ou 3 (trifásico).');
+                return;
+            }
+
+            // Exibir resultado
+            document.getElementById('resultado').innerText = `Corrente de Projeto: ${I_projeto.toFixed(2)} A`;
+        }
+    </script>
+</body>
+</html>
