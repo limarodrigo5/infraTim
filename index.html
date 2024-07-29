@@ -72,7 +72,7 @@
     <div class="container">
         <h1>Manual Operacional de Infraestrutura <br>TIM Brasil</h1>
         <label for="V_dc">Tensão DC (V_dc):</label>
-        <input type="number" id="V_dc" step="any" min="0">
+        <input type="number" id="V_dc" step="any">
         
         <label for="I_dc">Corrente DC (I_dc):</label>
         <input type="number" id="I_dc" step="any" min="0">
@@ -91,25 +91,17 @@
     <script>
         function calcularCorrenteProjeto() {
             // Obter valores de entrada
-            const V_dc = parseFloat(document.getElementById('V_dc').value);
+            const V_dc = Math.abs(parseFloat(document.getElementById('V_dc').value));
             const I_dc = parseFloat(document.getElementById('I_dc').value);
             const fases = parseInt(document.getElementById('fases').value);
             const V_ac = parseFloat(document.getElementById('V_ac').value);
-            
+   
             // Verificar se os valores são válidos
             if (isNaN(V_dc) || isNaN(I_dc) || isNaN(fases) || isNaN(V_ac)) {
                 alert('Por favor, insira todos os valores corretamente.');
                 return;
             }
 
-            if (isNaN(V_dc) || V_dc < 0) {
-        alert('Por favor, insira um valor positivo para Tensão DC.');
-        return;
-    }
-    if (isNaN(I_dc) || I_dc < 0) {
-        alert('Por favor, insira um valor positivo para Corrente DC.');
-        return;}
-        
 
             // Constantes
             const FP = 0.98;
