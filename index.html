@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dimensionamento de Infra - TIM BRASIL</title>
+    <title>Manual Operacional de Infraestrutura - TIM BRASIL</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -38,6 +38,11 @@
             border-radius: 5px;
             box-sizing: border-box;
         }
+        input[readonly] {
+            background-color: #e0e0e0; /* Cinza claro */
+            color: #757575; /* Cinza escuro */
+            cursor: not-allowed;
+        }
         button {
             width: 100%;
             padding: 10px;
@@ -65,18 +70,18 @@
 </head>
 <body>
     <div class="container">
-        <h1>Dimensionamento de Infra - TIM BRASIL</h1>
+        <h1>Manual Operacional de Infraestrutura <br>TIM Brasil</h1>
         <label for="V_dc">Tensão DC (V_dc):</label>
-        <input type="number" id="V_dc" step="any">
+        <input type="number" id="V_dc" step="any" min="0">
         
         <label for="I_dc">Corrente DC (I_dc):</label>
-        <input type="number" id="I_dc" step="any">
+        <input type="number" id="I_dc" step="any" min="0">
         
         <label for="fases">Número de Fases:</label>
         <input type="number" id="fases" step="any">
         
         <label for="V_ac">Tensão AC da Rede (V_ac):</label>
-        <input type="number" id="V_ac" step="any">
+        <input type="number" id="V_ac" value="220" readonly>
         
         <button onclick="calcularCorrenteProjeto()">Calcular</button>
         
@@ -96,6 +101,15 @@
                 alert('Por favor, insira todos os valores corretamente.');
                 return;
             }
+
+            if (isNaN(V_dc) || V_dc < 0) {
+        alert('Por favor, insira um valor positivo para Tensão DC.');
+        return;
+    }
+    if (isNaN(I_dc) || I_dc < 0) {
+        alert('Por favor, insira um valor positivo para Corrente DC.');
+        return;}
+        
 
             // Constantes
             const FP = 0.98;
