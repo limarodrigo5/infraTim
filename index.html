@@ -4,73 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manual Operacional de Infraestrutura - TIM BRASIL</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
-        .container {
-            max-width: 500px;
-            margin: 40px auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            font-size: 24px;
-            color: #0033A0; /* Azul escuro TIM */
-            text-align: center;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-        }
-        input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        input[readonly] {
-            background-color: #e0e0e0; /* Cinza claro */
-            color: #757575; /* Cinza escuro */
-            cursor: not-allowed;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #00a5ce; /* Azul claro TIM */
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #005BB5; /* Azul escuro ao passar o mouse */
-        }
-        .result {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            text-align: center;
-            font-size: 18px;
-            color: #333;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    
 </head>
 <body>
-    <div class="container">
+    <div class="container1">
         <h1>Manual Operacional de Infraestrutura <br>TIM Brasil</h1>
+        <h2>Conversão CC/CA - Verificação Rede AC</h2>
         <label for="V_dc">Tensão DC (V_dc):</label>
         <input type="number" id="V_dc" step="any">
         
@@ -86,46 +26,73 @@
         <button onclick="calcularCorrenteProjeto()">Calcular</button>
         
         <div class="result" id="resultado"></div>
+
+        <label for="I_ac">Corrente AC Atual Medida (I_ac):</label>
+        <input type="number" id="I_ac" step="any" min="0">
+
+        <label for="disj_qm">Cap. Disj. Alimentação QM (I_ac):</label>
+        <input type="number" id="disj_qm" >
+
+        <label for="disj_qtmqdg">Cap. Disj. Alimentação QTM/QDG (I_ac):</label>
+        <input type="number" id="disj_qtmqdg" >
+
+        <label for="disj_fcc">Cap. Disj. Alimentação FCC (I_ac):</label>
+        <input type="number" id="disj_fcc" >
+
+        <label for="bitola_qm">Bitola Cabo QM -> QTM (mm²):</label>
+        <input type="number" id="bitola_qm" >
+
+        <label for="bitola_qtmqdg">Bitola Cabo QTM -> QDG/OPSS (mm²):</label>
+        <input type="number" id="bitola_qtmqdg" >
+
+        <label for="bitola_fcc">Bitola Cabo QM -> FCC (mm²):</label>
+        <input type="number" id="bitola_fcc" >
+
     </div>
 
-    <script>
-        function calcularCorrenteProjeto() {
-            // Obter valores de entrada
-            const V_dc = Math.abs(parseFloat(document.getElementById('V_dc').value));
-            const I_dc = parseFloat(document.getElementById('I_dc').value);
-            const fases = parseInt(document.getElementById('fases').value);
-            const V_ac = parseFloat(document.getElementById('V_ac').value);
+    <div class="container2">
+        <h1>Manual Operacional de Infraestrutura <br>TIM Brasil</h1>
+        <h2>Verificação Fonte CC</h2>
+        <label for="fabricante">Fabricante:</label>
+        <select id="fabricante" onchange="atualizarModelos()">
+            <option value="">Selecione um fabricante</option>
+            <option value="eltek">Eltek</option>
+            <option value="moura">Moura</option>
+        </select>
+        
+        
+        <label for="modelo">Modelo:</label>
+    <select id="modelo">
+        <option value="">Selecione um modelo</option>
+    </select>
+
+    <label for="retificadores">N° de retificadores instalados:</label>
+    <input type="number" id="retificadores" step="any">
+
+    <label for="capacity">Capacidade FCC:</label>
+        <input type="number" id="capacity_fcc" readonly placeholder="à calcular">
+        
+        <label for="capacity_actual">Capacidade Atual Medida (I_ac):</label>
+        <input type="number" id="capacity_actual" >
+
+        <label for="fcc_oknok">Funcionamento Controladora FCC:</label>
+        <div id="fcc_oknok">
+            <input type="radio" id="fcc_ok" name="fcc_oknok" value="ok">
+            <label for="fcc_ok">OK</label>
+            <input type="radio" id="fcc_nok" name="fcc_oknok" value="nok">
+            <label for="fcc_nok">NOK</label>
+        </div>
+        
+        <label for="obs">Observações:</label>
+        <textarea id="obs" rows="4" cols="50" placeholder="EX: Adicionar outra FCC? Ruído anormal no componente?"></textarea>
+
+    </div>
+
    
-            // Verificar se os valores são válidos
-            if (isNaN(V_dc) || isNaN(I_dc) || isNaN(fases) || isNaN(V_ac)) {
-                alert('Por favor, insira todos os valores corretamente.');
-                return;
-            }
 
 
-            // Constantes
-            const FP = 0.98;
-            const Rendimento = 0.99;
+    <script src="conversao_cacc.js"></script>
+    <script src="verificacao_fcc.js"></script>
 
-            // Calcular a Potência DC
-            const P_dc = V_dc * I_dc;
-
-            // Calcular Corrente de Projeto
-            let I_projeto;
-            if (fases === 2) {
-                const V_ac_bifasico = 110; // Tensão fase-terra para bifásico
-                I_projeto = P_dc / (V_ac_bifasico * FP * Rendimento * 2);
-            } else if (fases === 3) {
-                const V_ac_trifasico = 220; // Tensão de linha para trifásico
-                I_projeto = P_dc / (Math.sqrt(3) * V_ac_trifasico * FP * Rendimento);
-            } else {
-                alert('Número de fases inválido. Deve ser 2 (bifásico) ou 3 (trifásico).');
-                return;
-            }
-
-            // Exibir resultado
-            document.getElementById('resultado').innerText = `Corrente de Projeto: ${I_projeto.toFixed(2)} A`;
-        }
-    </script>
 </body>
 </html>
