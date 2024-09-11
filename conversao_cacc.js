@@ -1,3 +1,26 @@
+function atualizarCamposCorrente() {
+    const fases = document.getElementById('fases').value;
+    const correnteAcR = document.getElementById('corrente_ac_r');
+    const correnteAcS = document.getElementById('corrente_ac_s');
+    const correnteAcT = document.getElementById('corrente_ac_t');
+
+    if (fases == 2) {
+        correnteAcR.style.display = 'block';
+        correnteAcS.style.display = 'block';
+        correnteAcT.style.display = 'none';
+    } else if (fases == 3) {
+        correnteAcR.style.display = 'block';
+        correnteAcS.style.display = 'block';
+        correnteAcT.style.display = 'block';
+    } else {
+        correnteAcR.style.display = 'none';
+        correnteAcS.style.display = 'none';
+        correnteAcT.style.display = 'none';
+    }
+}
+
+
+
 function calcularCorrenteProjeto() {
     // Obter valores de entrada
     const V_dc = Math.abs(parseFloat(document.getElementById('V_dc').value));
@@ -12,12 +35,14 @@ function calcularCorrenteProjeto() {
     }
 
 
+
     // Constantes
     const FP = 0.98;
     const Rendimento = 0.99;
 
     // Calcular a Potência DC
     const P_dc = V_dc * I_dc;
+    
 
     // Calcular Corrente de Projeto
     let I_projeto;
@@ -35,5 +60,3 @@ function calcularCorrenteProjeto() {
     // Exibir resultado
     document.getElementById('resultado').innerText = `Corrente de Projeto: ${I_projeto.toFixed(2)} A`;
 }
-
-

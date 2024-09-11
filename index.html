@@ -8,7 +8,7 @@
     
 </head>
 <body>
-    <div class="container1">
+    <div class="container">
         <h1>Manual Operacional de Infraestrutura <br>TIM Brasil</h1>
         <h2>Conversão CC/CA - Verificação Rede AC</h2>
         <label for="V_dc">Tensão DC (V_dc):</label>
@@ -18,7 +18,7 @@
         <input type="number" id="I_dc" step="any" min="0">
         
         <label for="fases">Número de Fases:</label>
-        <input type="number" id="fases" step="any">
+        <input type="number" id="fases" step="any" oninput="atualizarCamposCorrente()">
         
         <label for="V_ac">Tensão AC da Rede (V_ac):</label>
         <input type="number" id="V_ac" value="220" readonly>
@@ -27,8 +27,20 @@
         
         <div class="result" id="resultado"></div>
 
-        <label for="I_ac">Corrente AC Atual Medida (I_ac):</label>
-        <input type="number" id="I_ac" step="any" min="0">
+        <div id="corrente_ac_r" style="display: none;">
+            <label for="I_ac_r">Corrente AC Atual Medida Fase R (I_ac):</label>
+            <input type="number" id="I_ac_r">
+        </div>
+        
+        <div id="corrente_ac_s" style="display: none;">
+            <label for="I_ac_s">Corrente AC Atual Medida Fase S (I_ac):</label>
+            <input type="number" id="I_ac_s">
+        </div>
+        
+        <div id="corrente_ac_t" style="display: none;">
+            <label for="I_ac_t">Corrente AC Atual Medida Fase T (I_ac):</label>
+            <input type="number" id="I_ac_t">
+        </div>
 
         <label for="disj_qm">Cap. Disj. Alimentação QM (I_ac):</label>
         <input type="number" id="disj_qm" >
@@ -50,7 +62,7 @@
 
     </div>
 
-    <div class="container2">
+    <div class="container">
         <h1>Manual Operacional de Infraestrutura <br>TIM Brasil</h1>
         <h2>Verificação Fonte CC</h2>
         <label for="fabricante">Fabricante:</label>
@@ -88,11 +100,53 @@
 
     </div>
 
-   
+    <div class="container">
+        <h1>Manual Operacional de Infraestrutura <br>TIM Brasil</h1>
+        <h2>Banco de Baterias</h2>
+        
+        <label for="material_baterias">Material:</label>
+        <select id="material_baterias" onchange="atualizarFabricantesBaterias()">
+            <option value="">Selecione o material de fabricação</option>
+            <option value="chumbo">Chumbo-Ácido</option>
+            <option value="litio">Lítio</option>
+        </select>
+        
+        <label for="fabricante_baterias">Fabricante:</label>
+        <select id="fabricante_baterias" onchange="atualizarModelosBaterias()">
+            <option value="">Selecione um fabricante</option>
+        </select>
+        
+        <label for="modelo_baterias">Modelo:</label>
+        <select id="modelo_baterias">
+            <option value="">Selecione um modelo</option>
+        </select>
+
+        <label for="baterias">N° de baterias instaladas:</label>
+        <input type="number" id="baterias" step="any">
+
+        <label for="recargaconfig">Corrente de recarga configurada:</label>
+        <input type="number" id="recargaconfig" step="any">
+
+        <label for="recarganecessaria">Corrente necessária para recarga:</label>
+        <input type="number" id="recarganecessaria" step="any">
+
+
+        <label for="comm_oknok">Bateria possui comunicação com a FCC?</label>
+        <div id="comm_oknok">
+            <input type="radio" id="comm_ok" name="comm_oknok" value="ok">
+            <label for="comm_ok">OK</label>
+            <input type="radio" id="comm_nok" name="comm_oknok" value="nok">
+            <label for="comm_nok">NOK</label>
+        </div>
+
+    </div>
+
+
 
 
     <script src="conversao_cacc.js"></script>
     <script src="verificacao_fcc.js"></script>
+    <script src="bancobaterias.js"></script>
 
 </body>
 </html>
